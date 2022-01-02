@@ -111,7 +111,7 @@ while client.is_running() == 'true':
         x = my_scale(n.pos.x, x=True)
         y = my_scale(n.pos.y, y=True)
 
-        # its just to get a nice antialiased circle
+        # its just to get a nice antialias circle
         gfxdraw.filled_circle(screen, int(x), int(y),
                               radius, Color(64, 80, 174))
         gfxdraw.aacircle(screen, int(x), int(y),
