@@ -20,8 +20,6 @@ class Node:
     def setPos(self,pos: tuple):
         self.pos = pos
 
-    def __repr__(self) -> str:
-        return f"id:{self.id} pos:{self.pos}"
 
 
 

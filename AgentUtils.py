@@ -1,16 +1,17 @@
 
 class Agent:
 
-    def __init__(self,id, value, source, dest, speed,pos):
+    def __init__(self,id,value,src,dest,speed,pos):
         self.id = id
         self.value = value
-        self.source = source
+        self.src = src
         self.dest = dest
         self.speed = speed
         self.pos = pos
 
     def __repr__(self) -> str:
-        return f"{'Agent': \n id:{self.value} value:{self.type} src:{self.pos} dest:{self.pos} speed:{self.pos} pos:{self.pos}}"
+        return "{{'Agent': id:{} value:{} src:{} dest:{} speed:{} pos:{}}}" \
+            .format(self.id,self.value, self.src, self.dest, self.speed, self.pos)
 
     def get_id(self):
         return self.id
@@ -27,6 +28,6 @@ class Agent:
     def get_speed(self):
         return self.speed
 
+
     def get_pos(self):
         return self.pos
-

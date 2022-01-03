@@ -3,7 +3,8 @@ import json
 from numpy import double
 from DiGraph import DiGraph
 import random
-import pokemon
+from PokemonUtils import Pokemon
+from AgentUtils import Agent
 import matplotlib.pyplot as plt
 
 class GraphAlgo():
@@ -138,7 +139,7 @@ class GraphAlgo():
             type = dict["Pokemons"][n]["Pokemon"]["type"]
             pos = dict["Pokemons"][n]["Pokemon"]["pos"]
             # p={'value': value,'type': type,'pos': pos}
-            p = pokemon(value,type,pos)
+            p = Pokemon(value, type, pos)
             pokemons[n]= p
         return pokemons
 
@@ -154,7 +155,7 @@ class GraphAlgo():
             speed = dict["Agents"][n]["Agent"]["speed"]
             pos = dict["Agents"][n]["Agent"]["pos"]
             # a={'id': id,'value': value,'src':src, 'dest':dest, 'speed':speed, 'pos': pos}
-            agent = agent(id,value,src,dest,speed,pos)
+            agent = Agent(id,value,src,dest,speed,pos)
             agents[n]= agent
         return agents
 
