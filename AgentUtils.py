@@ -1,5 +1,5 @@
 
-class agent:
+class Agent:
 
     def __init__(self,id, value, source, dest, speed,pos):
         self.id = id
