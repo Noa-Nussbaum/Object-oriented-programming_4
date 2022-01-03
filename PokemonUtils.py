@@ -1,5 +1,5 @@
 
-class pokemon:
+class Pokemon:
 
     def __init__(self, value, type, pos):
         self.value = value
