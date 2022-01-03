@@ -137,10 +137,26 @@ class GraphAlgo():
             value = dict["Pokemons"][n]["Pokemon"]["value"]
             type = dict["Pokemons"][n]["Pokemon"]["type"]
             pos = dict["Pokemons"][n]["Pokemon"]["pos"]
-            p={'value': value,'type': type,'pos': pos}
-            # p = pokemon(value,type,pos)
+            # p={'value': value,'type': type,'pos': pos}
+            p = pokemon(value,type,pos)
             pokemons[n]= p
         return pokemons
+
+
+    def load_agents(self,string:str) -> dict:
+        agents = {}
+        dict = json.loads(string)
+        for n in range(len(dict["Agents"])):
+            id = dict["Agents"][n]["Agent"]["id"]
+            value = dict["Agents"][n]["Agent"]["value"]
+            src = dict["Agents"][n]["Agent"]["src"]
+            dest = dict["Agents"][n]["Agent"]["dest"]
+            speed = dict["Agents"][n]["Agent"]["speed"]
+            pos = dict["Agents"][n]["Agent"]["pos"]
+            # a={'id': id,'value': value,'src':src, 'dest':dest, 'speed':speed, 'pos': pos}
+            agent = agent(id,value,src,dest,speed,pos)
+            agents[n]= agent
+        return agents
 
 
 

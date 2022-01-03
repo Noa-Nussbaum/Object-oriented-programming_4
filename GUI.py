@@ -30,4 +30,9 @@ print(g)
 pokemons = client.get_pokemons()
 poke = g.load_pokemons(pokemons)
 
-print(poke)
+agen = client.get_agents()
+client.add_agent({'value': 0,'type': -1,'pos': [989.090,089.989]})
+print(type(agen))
+age = g.load_agents(agen)
+
+print(age)
