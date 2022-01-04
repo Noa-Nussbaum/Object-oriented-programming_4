@@ -1,3 +1,4 @@
+import sys
 from types import SimpleNamespace
 from client import Client
 import json
@@ -47,29 +48,69 @@ clock = pygame.time.Clock()
 
 client.start()
 
+minX = sys.float_info.max
+minY = sys.float_info.max
+maxX = sys.float_info.min
+maxY = sys.float_info.min
+
+for n,node in graph.nodes.items():
+    point_x = float(node.getPos()[0])
+    point_y = float(node.getPos()[1])
+    if(point_x > maxX):
+        maxX = point_x
+    if (point_y > maxY):
+        maxY = point_y
+    if (point_x < minX):
+        minX = point_x
+    if (point_y < minY):
+        minY = point_y
+
+absX = abs(maxX-minX)
+absY = abs(maxY-minY)
+
+scaleX = (WIDTH/absX)*0.9
+scaleY = (HEIGHT/absY)*0.9
+
 while client.is_running() == 'true':
+    # Color the screen
+    # screen.fill(Color(0, 0, 255))
+
     # Draw the graph
 
     # Get the nodes
     for n,node in graph.nodes.items():
-        pygame.draw.circle(screen, (0, 0, 255), [node.getPos()[0], node.getPos()[1]], 5)
+        x = int((float(node.getPos()[0]) - minX) * scaleX * 0.9 + 32)
+        y = int((float(node.getPos()[1]) - minY) * scaleY * 0.9 + 32)
+        pygame.draw.circle(screen, (61, 72, 126), [x-7,y-7], 20)
 
-    # draw the node id
-    id_srf = FONT.render(str(node.getId()), True, Color(255, 255, 255))
-    rect = id_srf.get_rect(center=(node.getPos()[0], node.getPos()[1]))
-    screen.blit(id_srf, rect)
+        # draw the node id
+        id_srf = FONT.render(str(node.getId()), True, Color(255, 255, 255))
+        rect = id_srf.get_rect(center=(x,y))
+        screen.blit(id_srf, rect)
 
+    # Get the edges
+    for e, edge in graph.edges.items():
+        src = graph.nodes.get(edge['src'])
+        dest = graph.nodes.get(edge['dest'])
+        src_x = int((float(src.getPos()[0]) - minX) * scaleX * 0.9 + 32)
+        src_y = int((float(src.getPos()[1]) - minY) * scaleY * 0.9 + 32)
+        dest_x = int((float(dest.getPos()[0]) - minX) * scaleX * 0.9 + 32)
+        dest_y = int((float(dest.getPos()[1]) - minY) * scaleY * 0.9 + 32)
+
+        pygame.draw.line(screen, Color(61, 72, 126),(src_x, src_y), (dest_x, dest_y),2)
 
     # Get pokemons
     # Get agents
 
-    # Color the screen
-    screen.fill(Color(0, 0, 255))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit(0)
 
+
+
+    # update screen changes
+    display.update()
 
 
