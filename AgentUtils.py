@@ -28,6 +28,5 @@ class Agent:
     def get_speed(self):
         return self.speed
 
-
     def get_pos(self):
         return self.pos

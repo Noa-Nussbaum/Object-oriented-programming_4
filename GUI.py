@@ -100,15 +100,39 @@ while client.is_running() == 'true':
         pygame.draw.line(screen, Color(61, 72, 126),(src_x, src_y), (dest_x, dest_y),2)
 
     # Get pokemons
-    # Get agents
+    pokemon_list = client.get_pokemons()
+    pokemons = graph.load_pokemons(pokemon_list)
 
+    for p,pokemon in pokemons.items():
+        positions = pokemon.get_pos().split(',')
+        x = int((float(positions[0]) - minX) * scaleX * 0.9 + 32)
+        y = int((float(positions[1]) - minY) * scaleY * 0.9 + 32)
+        if(pokemon.type==1):
+            pygame.draw.circle(screen, (138,43,226), [x - 7, y - 7], 20) # Purple if up
+        else:
+            pygame.draw.circle(screen, (152,245,255), [x - 7, y - 7], 20) # Light blue if down
+
+
+    # Get agents
+    info = json.loads(client.get_info())
+    num_agents = info['GameServer']['agents']
+    for n in range(num_agents):
+        name = "{\"id\":" + str(n) + "}"
+        client.add_agent(name)
+
+    agent_list = client.get_agents()
+    agents = graph.load_agents(agent_list)
+
+    for a, agent in agents.items():
+        positions = agent.get_pos().split(',')
+        x = int((float(positions[0]) - minX) * scaleX * 0.9 + 32)
+        y = int((float(positions[1]) - minY) * scaleY * 0.9 + 32)
+        pygame.draw.circle(screen, (127,255,0), [x - 7, y - 7], 20) # Agents are green
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit(0)
-
-
 
     # update screen changes
     display.update()
