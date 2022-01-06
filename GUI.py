@@ -67,12 +67,15 @@ absY = abs(maxY-minY)
 scaleX = (WIDTH/absX)*0.9
 scaleY = (HEIGHT/absY)*0.9
 
+# Moves counter
+moves = 0
+
 while client.is_running() == 'true':
 
     pygame.display.set_caption("Pokemon Game - Ex4")
 
     # Color the screen
-    screen.fill(Color(0, 0, 255))
+    screen.fill(Color(173,216,230))
 
     # Draw the graph
 
@@ -133,21 +136,33 @@ while client.is_running() == 'true':
             exit(0)
 
     # Timer window
-    pygame.draw.rect(screen, (0,   0,   0), [20, 15, 100, 70],border_radius=15)
-    time_text = FONT.render("Time: "+str(int(pygame.time.get_ticks()/1000)), True, Color(255, 255, 255))
-    rect = time_text.get_rect(center=(70,50))
-    screen.blit(time_text, rect)
+    pygame.draw.rect(screen, (255,193,193), [20, 185, 100, 70],border_radius=15)
+    moves_text = FONT.render("Moves: "+ str(moves), True, Color(0,0,0))
+    # rect = moves_text.get_rect(center=(70,50))
+    screen.blit(moves_text, (20,205))
 
     # Moves counter window
-    pygame.draw.rect(screen, (0, 0, 0), [20, 15, 100, 70], border_radius=15)
-    time_text = FONT.render("Time: " + str(int(pygame.time.get_ticks() / 1000)), True, Color(255, 255, 255))
+    pygame.draw.rect(screen, (255,193,193), [20, 15, 100, 70], border_radius=15)
+    time_text = FONT.render("Time: " + str(int(pygame.time.get_ticks() / 1000)), True, Color(0,0,0))
     rect = time_text.get_rect(center=(70, 50))
     screen.blit(time_text, rect)
 
-    # Update screen changes
-    display.update()
+    # Stop button
+    button = pygame.Rect(20, 100, 100, 70)
+    stop_text = FONT.render("Stop", True, Color(0,0,0))
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        mouse_pos = event.pos
+        if button.collidepoint(mouse_pos):
+            client.stop()
+    pygame.draw.rect(screen, (255,193,193), button, border_radius=15)
+    screen.blit(stop_text, (45, 125))
 
+    # Update screen changes and number of moves
+    display.update()
+    moves = moves+1
     clock.tick(60)
+
+
 
 
 
