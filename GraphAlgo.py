@@ -138,7 +138,7 @@ class GraphAlgo():
             value = dict["Pokemons"][n]["Pokemon"]["value"]
             type = dict["Pokemons"][n]["Pokemon"]["type"]
             pos = dict["Pokemons"][n]["Pokemon"]["pos"]
-            p = Pokemon(value, type, pos)
+            p = Pokemon(value, type, pos, self.graph)
             pokemons[n]= p
         return pokemons
 
@@ -156,6 +156,7 @@ class GraphAlgo():
             agent = Agent(id,value,src,dest,speed,pos)
             agents[n]= agent
         return agents
+
 
 
 

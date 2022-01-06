@@ -20,6 +20,7 @@ graph = GraphAlgo()
 graph.load_from_json(file)
 print(graph)
 
+
 # Get the pokemons
 pokemon_list = client.get_pokemons()
 pokemons = graph.load_pokemons(pokemon_list)
@@ -68,7 +69,7 @@ scaleX = (WIDTH/absX)*0.9
 scaleY = (HEIGHT/absY)*0.9
 
 # Moves counter
-moves = 0
+moves = info['GameServer']['moves']
 
 while client.is_running() == 'true':
 
@@ -76,6 +77,9 @@ while client.is_running() == 'true':
 
     # Color the screen
     screen.fill(Color(173,216,230))
+
+    # Update number of moves
+    moves = info['GameServer']['moves']
 
     # Draw the graph
 
@@ -99,7 +103,7 @@ while client.is_running() == 'true':
         dest_x = int((float(dest.getPos()[0]) - minX) * scaleX * 0.9 + 32)
         dest_y = int((float(dest.getPos()[1]) - minY) * scaleY * 0.9 + 32)
 
-        pygame.draw.line(screen, Color(61, 72, 126) ,(src_x, src_y), (dest_x, dest_y), 2)
+        pygame.draw.line(screen, Color(61, 72, 126), (src_x, src_y), (dest_x, dest_y), 2)
 
     # Get pokemons
     pokemon_list = client.get_pokemons()
@@ -109,10 +113,12 @@ while client.is_running() == 'true':
         positions = pokemon.get_pos().split(',')
         x = int((float(positions[0]) - minX) * scaleX * 0.9 + 32)
         y = int((float(positions[1]) - minY) * scaleY * 0.9 + 32)
+        print(pokemon.src,pokemon.dest)
         if(pokemon.type==1):
             pygame.draw.circle(screen, (138,43,226), [x - 7, y - 7], 20) # Purple if up
         else:
             pygame.draw.circle(screen, (152,245,255), [x - 7, y - 7], 20) # Light blue if down
+
 
     # Get agents
     info = json.loads(client.get_info())
@@ -136,29 +142,47 @@ while client.is_running() == 'true':
             exit(0)
 
     # Timer window
-    pygame.draw.rect(screen, (255,193,193), [20, 20, 90, 65], border_radius=15)
+    pygame.draw.rect(screen, (255,193,193), [20, 10, 90, 65], border_radius=15)
     time_text = FONT.render("Time: " + str(int(pygame.time.get_ticks() / 1000)), True, Color(0,0,0))
-    screen.blit(time_text, (30, 40))
+    screen.blit(time_text, (30, 30))
 
     # Stop button
-    button = pygame.Rect(20, 100, 90, 65)
+    button = pygame.Rect(20, 90, 90, 65)
     stop_text = FONT.render("Stop", True, Color(0, 0, 0))
     if event.type == pygame.MOUSEBUTTONDOWN:
         mouse_pos = event.pos
         if button.collidepoint(mouse_pos):
             client.stop()
     pygame.draw.rect(screen, (255, 193, 193), button, border_radius=15)
-    screen.blit(stop_text, (40, 120))
+    screen.blit(stop_text, (40, 110))
 
     # Moves counter window
-    pygame.draw.rect(screen, (255,193,193),[20, 180, 90, 65] ,border_radius=15)
+    pygame.draw.rect(screen, (255,193,193),[20, 170, 90, 65] ,border_radius=15)
     moves_text = FONT.render("Moves: " + str(moves), True, Color(0,0,0))
-    screen.blit(moves_text, (20,205))
+    screen.blit(moves_text, (20,190))
 
-    # Update screen changes and number of moves
+    # Update screen changes
     display.update()
-    moves = moves+1
     clock.tick(60)
+
+    for a, agent in agents.items():
+        if agent.get_dest() == -1:
+            next_node = (agent.get_src() - 1) % len(graph.nodes)
+            client.choose_next_edge(
+                '{"agent_id":'+str(agent.get_id())+', "next_node_id":'+str(next_node)+'}')
+            ttl = client.time_to_end()
+            print(ttl, client.get_info())
+
+    # for a, agent in agents.items():
+    #     if agent.get_dest == -1:
+    #         shortest = 0
+    #         for()
+
+
+
+
+    client.move()
+
 
 
 
