@@ -136,26 +136,24 @@ while client.is_running() == 'true':
             exit(0)
 
     # Timer window
-    pygame.draw.rect(screen, (255,193,193), [20, 185, 100, 70],border_radius=15)
-    moves_text = FONT.render("Moves: "+ str(moves), True, Color(0,0,0))
-    # rect = moves_text.get_rect(center=(70,50))
-    screen.blit(moves_text, (20,205))
-
-    # Moves counter window
-    pygame.draw.rect(screen, (255,193,193), [20, 15, 100, 70], border_radius=15)
+    pygame.draw.rect(screen, (255,193,193), [20, 20, 90, 65], border_radius=15)
     time_text = FONT.render("Time: " + str(int(pygame.time.get_ticks() / 1000)), True, Color(0,0,0))
-    rect = time_text.get_rect(center=(70, 50))
-    screen.blit(time_text, rect)
+    screen.blit(time_text, (30, 40))
 
     # Stop button
-    button = pygame.Rect(20, 100, 100, 70)
-    stop_text = FONT.render("Stop", True, Color(0,0,0))
+    button = pygame.Rect(20, 100, 90, 65)
+    stop_text = FONT.render("Stop", True, Color(0, 0, 0))
     if event.type == pygame.MOUSEBUTTONDOWN:
         mouse_pos = event.pos
         if button.collidepoint(mouse_pos):
             client.stop()
-    pygame.draw.rect(screen, (255,193,193), button, border_radius=15)
-    screen.blit(stop_text, (45, 125))
+    pygame.draw.rect(screen, (255, 193, 193), button, border_radius=15)
+    screen.blit(stop_text, (40, 120))
+
+    # Moves counter window
+    pygame.draw.rect(screen, (255,193,193),[20, 180, 90, 65] ,border_radius=15)
+    moves_text = FONT.render("Moves: " + str(moves), True, Color(0,0,0))
+    screen.blit(moves_text, (20,205))
 
     # Update screen changes and number of moves
     display.update()
