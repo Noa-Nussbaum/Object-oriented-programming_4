@@ -20,10 +20,10 @@ class GraphAlgo():
     def get_graph(self):
         return self.graph
 
-    def load_from_json(self, string: str):
+    def load_from_json(self, info: str):
         self.__init__()
         graph = DiGraph()
-        dict = json.loads(string)
+        dict = json.loads(info)
         for n in range(len(dict["Nodes"])):
             id = dict["Nodes"][n]["id"]
             pos = dict["Nodes"][n]["pos"]

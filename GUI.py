@@ -1,10 +1,7 @@
 import sys
-from types import SimpleNamespace
 from client import Client
 import json
-from pygame import gfxdraw
 import pygame
-from Node import Node
 from GraphAlgo import GraphAlgo
 from pygame import *
 
@@ -40,7 +37,6 @@ agents = graph.load_agents(agent_list)
 print(agents)
 
 screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
-pygame.display.set_caption("Pokemon Game - Ex4")
 
 pygame.font.init()
 FONT = pygame.font.SysFont('Arial', 20, bold=True)
@@ -53,16 +49,16 @@ minY = sys.float_info.max
 maxX = sys.float_info.min
 maxY = sys.float_info.min
 
-for n,node in graph.nodes.items():
+for n, node in graph.nodes.items():
     point_x = float(node.getPos()[0])
     point_y = float(node.getPos()[1])
-    if(point_x > maxX):
+    if point_x > maxX:
         maxX = point_x
-    if (point_y > maxY):
+    if point_y > maxY:
         maxY = point_y
-    if (point_x < minX):
+    if point_x < minX:
         minX = point_x
-    if (point_y < minY):
+    if point_y < minY:
         minY = point_y
 
 absX = abs(maxX-minX)
@@ -72,23 +68,26 @@ scaleX = (WIDTH/absX)*0.9
 scaleY = (HEIGHT/absY)*0.9
 
 while client.is_running() == 'true':
+
+    pygame.display.set_caption("Pokemon Game - Ex4")
+
     # Color the screen
-    # screen.fill(Color(0, 0, 255))
+    screen.fill(Color(0, 0, 255))
 
     # Draw the graph
 
-    # Get the nodes
-    for n,node in graph.nodes.items():
+    # Get nodes
+    for n, node in graph.nodes.items():
         x = int((float(node.getPos()[0]) - minX) * scaleX * 0.9 + 32)
         y = int((float(node.getPos()[1]) - minY) * scaleY * 0.9 + 32)
         pygame.draw.circle(screen, (61, 72, 126), [x-7,y-7], 20)
 
-        # draw the node id
+        # draw node id
         id_srf = FONT.render(str(node.getId()), True, Color(255, 255, 255))
-        rect = id_srf.get_rect(center=(x,y))
+        rect = id_srf.get_rect(center=(x, y))
         screen.blit(id_srf, rect)
 
-    # Get the edges
+    # Get edges
     for e, edge in graph.edges.items():
         src = graph.nodes.get(edge['src'])
         dest = graph.nodes.get(edge['dest'])
@@ -97,7 +96,7 @@ while client.is_running() == 'true':
         dest_x = int((float(dest.getPos()[0]) - minX) * scaleX * 0.9 + 32)
         dest_y = int((float(dest.getPos()[1]) - minY) * scaleY * 0.9 + 32)
 
-        pygame.draw.line(screen, Color(61, 72, 126),(src_x, src_y), (dest_x, dest_y),2)
+        pygame.draw.line(screen, Color(61, 72, 126) ,(src_x, src_y), (dest_x, dest_y), 2)
 
     # Get pokemons
     pokemon_list = client.get_pokemons()
@@ -111,7 +110,6 @@ while client.is_running() == 'true':
             pygame.draw.circle(screen, (138,43,226), [x - 7, y - 7], 20) # Purple if up
         else:
             pygame.draw.circle(screen, (152,245,255), [x - 7, y - 7], 20) # Light blue if down
-
 
     # Get agents
     info = json.loads(client.get_info())
@@ -134,7 +132,23 @@ while client.is_running() == 'true':
             pygame.quit()
             exit(0)
 
-    # update screen changes
+    # Timer window
+    pygame.draw.rect(screen, (0,   0,   0), [20, 15, 100, 70],border_radius=15)
+    time_text = FONT.render("Time: "+str(int(pygame.time.get_ticks()/1000)), True, Color(255, 255, 255))
+    rect = time_text.get_rect(center=(70,50))
+    screen.blit(time_text, rect)
+
+    # Moves counter window
+    pygame.draw.rect(screen, (0, 0, 0), [20, 15, 100, 70], border_radius=15)
+    time_text = FONT.render("Time: " + str(int(pygame.time.get_ticks() / 1000)), True, Color(255, 255, 255))
+    rect = time_text.get_rect(center=(70, 50))
+    screen.blit(time_text, rect)
+
+    # Update screen changes
     display.update()
+
+    clock.tick(60)
+
+
 
 
