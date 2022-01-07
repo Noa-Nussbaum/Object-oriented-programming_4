@@ -1,9 +1,11 @@
+import asyncio
 import sys
 from client import Client
 import json
 import pygame
 from GraphAlgo import GraphAlgo
 from pygame import *
+from src.AgentUtils import Agent
 
 WIDTH, HEIGHT = 1080, 720
 PORT = 6666
@@ -71,6 +73,16 @@ scaleY = (HEIGHT/absY)*0.9
 # Moves counter
 moves = info['GameServer']['moves']
 
+async def move_after(delay):
+    await asyncio.sleep(delay)
+    client.move()
+
+async def move_pokemons2(flag: bool = False):
+    if not flag:
+        await move_after(0.15)
+    if flag:
+        client.move()
+
 while client.is_running() == 'true':
 
     pygame.display.set_caption("Pokemon Game - Ex4")
@@ -113,7 +125,6 @@ while client.is_running() == 'true':
         positions = pokemon.get_pos().split(',')
         x = int((float(positions[0]) - minX) * scaleX * 0.9 + 32)
         y = int((float(positions[1]) - minY) * scaleY * 0.9 + 32)
-        print(pokemon.src,pokemon.dest)
         if(pokemon.type==1):
             pygame.draw.circle(screen, (138,43,226), [x - 7, y - 7], 20) # Purple if up
         else:
@@ -165,25 +176,47 @@ while client.is_running() == 'true':
     display.update()
     clock.tick(60)
 
+    # pokemons_temp = pokemons
+
+    def choosePokForAgent(self, agent: Agent):
+        print("I'm in the function")
+        minDist = float('inf')
+        pokemonMin = None
+        index=None
+        for p, pokemon in pokemons:
+            dist = graph.shortest_path(agent.get_src(), pokemon.get_src())[0]
+            if dist < minDist:
+                minDist = dist
+                pokemonMin = pokemon
+                index=p
+        pokemons.pop(index)
+        return pokemonMin
+
     for a, agent in agents.items():
         if agent.get_dest() == -1:
-            next_node = (agent.get_src() - 1) % len(graph.nodes)
-            client.choose_next_edge(
-                '{"agent_id":'+str(agent.get_id())+', "next_node_id":'+str(next_node)+'}')
+            pokemon = choosePokForAgent(agent)
+            client.choose_next_edge('{"agent_id":{}, "next_node_id":{}}'.format(str(agent.get_id()), str(pokemon.get_src())))
             ttl = client.time_to_end()
             print(ttl, client.get_info())
 
     # for a, agent in agents.items():
-    #     if agent.get_dest == -1:
-    #         shortest = 0
-    #         for()
+    #     if agent.get_dest() == -1:
+    #         next_node = (agent.get_src() - 1) % len(graph.nodes) # Let's change only this line
+    #         client.choose_next_edge(
+    #             '{"agent_id":'+str(agent.get_id())+', "next_node_id":'+str(next_node)+'}')
+    #         ttl = client.time_to_end()
+    #         print(ttl, client.get_info())
 
+    move = False
+    for a, agent in agents.items():
+        for p, pokemon in pokemons.items():
+            if agent.get_src() == pokemon.get_src() and agent.get_dest() == pokemon.get_dest():
+                move = True
+                break
+        if move:
+            break
 
-
-
-    client.move()
-
-
+    asyncio.run(move_pokemons2(move))
 
 
 
