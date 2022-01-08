@@ -6,7 +6,7 @@
 
 _General Overview_
 
-In this assignment, we were given several interfaces to implement; The Digraph and GraphAlgo interfaces. In order to implement them and to write the required functions, we had to use different data structures to match to our needs. In addition, we created various classes in order to achieve the best results and the highest efficiency levels. After completing this stage, we were instructed to build a class in which we finally presented the graphs.
+In this assignment, we were expected to design a “Pokemon game” in which given a weighted graph,  a set of “Agents” should be located on it so they could “catch” as many “Pokemons” as possible. The pokemons are located on the graph’s (directed) edges, therefore, the agent needs to take the proper edge to “grab” the pokemon. Our goal was to maximize the overall sum of weights of the “grabbed” pokemons (while not exceeding the maximum amount of server calls allowed in a second - 10 max). In order to achieve this, we some of the classes we created in our previous graph related assignment. In addition, we created a pokemon and an agent class. We also created a GUI class, in which we used pygame for graphics.
 
 _DiGraph_
 
