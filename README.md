@@ -15,10 +15,10 @@ In this class, we've created functions allowing the user to make changes to the 
 
 _GraphAlgo_
 
-In GraphAlgo, we implemented the GraphAlgo interface. We wrote functions that run different algorithms on the Digraph object. For example, the Shortest Path function finds the shortest path existing between two given nodes. In addition, the TSP function solves the Travelling Salesman Problem in the graph. In order to implement them, we wrote the Dijkstra function as a helper.
+In GraphAlgo, we implemented the GraphAlgo interface. We wrote functions that run different algorithms on the Digraph object. For example, the Shortest Path function finds the shortest path existing between two given nodes. In addition, the TSP function solves the Travelling Salesman Problem in the graph. In order to implement them, we wrote the Dijkstra function as a helper. For this assignment, we added two load functions, which allowed us to read and create agents and pokemons by reading them from a given JSON file.
 
 _Tests_
 
-The TestDiGraph and TestGraphAlgo classes run tests on both of the classes,respectively. We tested them using JSON files which hold great amounts of nodes and edges in order to check efficiency.
+The Tests class runs tests on both of the classes respectively. We tested them using JSON files which hold great amounts of nodes and edges in order to check efficiency.
 
 [Here is a link to the assignment in GitHub](https://docs.google.com/document/d/1LrXIX2pLvRIVHdSqVIimCCxL7UBMaogAcLKfr2dOjHk/edit)
