@@ -22,3 +22,6 @@ _Tests_
 The Tests class runs tests on both of the classes respectively. We tested them using JSON files which hold great amounts of nodes and edges in order to check efficiency.
 
 [Here is a link to the assignment in GitHub](https://docs.google.com/document/d/1LrXIX2pLvRIVHdSqVIimCCxL7UBMaogAcLKfr2dOjHk/edit)
+
+Below is the project’s UML diagram, including classes and functions:
+![image](https://user-images.githubusercontent.com/76524924/148657402-656ffe6f-5d86-4552-b189-6feb97f36399.png)
