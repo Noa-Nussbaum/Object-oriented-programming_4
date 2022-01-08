@@ -85,6 +85,8 @@ async def move_pokemons2(flag: bool = False):
     if flag:
         client.move()
 
+flag = True
+
 while client.is_running() == 'true':
 
     pygame.display.set_caption("Pokemon Game - Ex4")
@@ -178,13 +180,24 @@ while client.is_running() == 'true':
     clock.tick(60)
 
     # Allocates a pokemon for each agent
+    # if not flag:
     pokemons_copy = pokemons.copy()
     for a, agent in agents.items():
         if agent.get_dest() == -1:
             pokemon, next_node = graph.choosePokForAgent(agent, pokemons_copy)
-            client.choose_next_edge('{"agent_id":' + str(agent.get_id()) + ', "next_node_id":' + str(next_node) + '}')
+            client.choose_next_edge(
+                '{"agent_id":' + str(agent.get_id()) + ', "next_node_id":' + str(next_node) + '}')
             ttl = client.time_to_end()
             print(ttl, client.get_info())
+
+    # if flag:
+    #     i = 0
+    #     for a, agent in agents.items():
+    #         print(pokemons.get(i).src)
+    #         client.choose_next_edge('{"agent_id":' + str(agent.get_id()) + ', "next_node_id":' + str(pokemons.get(i).src) + '}')
+    #         ttl = client.time_to_end()
+    #         i=i+1
+    #     flag = False
 
     move = False
     for a, agent in agents.items():
