@@ -5,7 +5,9 @@ import json
 import pygame
 from GraphAlgo import GraphAlgo
 from pygame import *
+from src import PokemonUtils
 from src.AgentUtils import Agent
+from src.PokemonUtils import Pokemon
 
 WIDTH, HEIGHT = 1080, 720
 PORT = 6666
@@ -130,7 +132,6 @@ while client.is_running() == 'true':
         else:
             pygame.draw.circle(screen, (152,245,255), [x - 7, y - 7], 20) # Light blue if down
 
-
     # Get agents
     info = json.loads(client.get_info())
     num_agents = info['GameServer']['agents']
@@ -176,36 +177,14 @@ while client.is_running() == 'true':
     display.update()
     clock.tick(60)
 
-    # pokemons_temp = pokemons
-
-    def choosePokForAgent(self, agent: Agent):
-        print("I'm in the function")
-        minDist = float('inf')
-        pokemonMin = None
-        index=None
-        for p, pokemon in pokemons:
-            dist = graph.shortest_path(agent.get_src(), pokemon.get_src())[0]
-            if dist < minDist:
-                minDist = dist
-                pokemonMin = pokemon
-                index=p
-        pokemons.pop(index)
-        return pokemonMin
-
+    # Allocates a pokemon for each agent
+    pokemons_copy = pokemons.copy()
     for a, agent in agents.items():
         if agent.get_dest() == -1:
-            pokemon = choosePokForAgent(agent)
-            client.choose_next_edge('{"agent_id":{}, "next_node_id":{}}'.format(str(agent.get_id()), str(pokemon.get_src())))
+            pokemon, next_node = graph.choosePokForAgent(agent, pokemons_copy)
+            client.choose_next_edge('{"agent_id":' + str(agent.get_id()) + ', "next_node_id":' + str(next_node) + '}')
             ttl = client.time_to_end()
             print(ttl, client.get_info())
-
-    # for a, agent in agents.items():
-    #     if agent.get_dest() == -1:
-    #         next_node = (agent.get_src() - 1) % len(graph.nodes) # Let's change only this line
-    #         client.choose_next_edge(
-    #             '{"agent_id":'+str(agent.get_id())+', "next_node_id":'+str(next_node)+'}')
-    #         ttl = client.time_to_end()
-    #         print(ttl, client.get_info())
 
     move = False
     for a, agent in agents.items():

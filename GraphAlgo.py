@@ -157,6 +157,26 @@ class GraphAlgo():
             agents[n]= agent
         return agents
 
+    # Finds pokemon to which to send the agent
+    def choosePokForAgent(self, agent: Agent,pokemons:dict):
+        minDist = float('inf')
+        pokemonMin = None
+        index=None
+        next_node=None
+        for p, pokemon in pokemons.items():
+            dist, next_node_temp = self.shortest_path(agent.get_src(), pokemon.get_dest())
+            if dist < minDist:
+                minDist = dist
+                pokemonMin = pokemon
+                index = p
+                if len(next_node_temp)==1:
+                    next_node=next_node_temp[0]
+                else:
+                    next_node = next_node_temp[1]
+        del pokemons[index]
+        return pokemonMin, next_node
+
+
 
 
 

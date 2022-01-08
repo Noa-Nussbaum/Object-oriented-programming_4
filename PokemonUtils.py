@@ -1,5 +1,6 @@
 import math
 import DiGraph
+from src.AgentUtils import Agent
 
 class Pokemon:
 
@@ -7,6 +8,7 @@ class Pokemon:
         self.value = value
         self.type = type
         self.pos = pos
+        self.graph = graph
         final_src = None
         final_dest = None
         for src in graph.nodes.keys():
