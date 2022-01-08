@@ -25,3 +25,6 @@ The Tests class runs tests on both of the classes respectively. We tested them u
 
 Below is the project’s UML diagram, including classes and functions:
 ![image](https://user-images.githubusercontent.com/76524924/148657402-656ffe6f-5d86-4552-b189-6feb97f36399.png)
+
+### :yellow_circle: Case 10:
+![Screen Recording 2022-01-09 at 1 27 33 am (1) copy](https://user-images.githubusercontent.com/76524924/148663621-e420387b-3cc9-4bc1-a3e3-5ba9cfe58cc3.gif)
