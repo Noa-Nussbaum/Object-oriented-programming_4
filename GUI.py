@@ -44,7 +44,7 @@ print(agents)
 screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
 
 pygame.font.init()
-FONT = pygame.font.SysFont('Arial', 20, bold=True)
+FONT = pygame.font.SysFont("comicsansms", 17, bold=True)
 clock = pygame.time.Clock()
 
 client.start()
@@ -85,15 +85,16 @@ async def move_pokemons2(flag: bool = False):
     if flag:
         client.move()
 
-flag = True
-
 while client.is_running() == 'true':
 
     pygame.display.set_caption("Pokemon Game - Ex4")
 
     # Color the screen
     screen.fill(Color(173,216,230))
+    bg = pygame.image.load("img.png")
 
+    # INSIDE OF THE GAME LOOP
+    screen.blit(bg, (0, 0))
     # Update number of moves
     moves = info['GameServer']['moves']
 
@@ -103,7 +104,7 @@ while client.is_running() == 'true':
     for n, node in graph.nodes.items():
         x = int((float(node.getPos()[0]) - minX) * scaleX * 0.9 + 32)
         y = int((float(node.getPos()[1]) - minY) * scaleY * 0.9 + 32)
-        pygame.draw.circle(screen, (61, 72, 126), [x-7,y-7], 20)
+        pygame.draw.circle(screen, (0,205,102), [x-7,y-7], 20)
 
         # draw node id
         id_srf = FONT.render(str(node.getId()), True, Color(255, 255, 255))
@@ -118,8 +119,7 @@ while client.is_running() == 'true':
         src_y = int((float(src.getPos()[1]) - minY) * scaleY * 0.9 + 32)
         dest_x = int((float(dest.getPos()[0]) - minX) * scaleX * 0.9 + 32)
         dest_y = int((float(dest.getPos()[1]) - minY) * scaleY * 0.9 + 32)
-
-        pygame.draw.line(screen, Color(61, 72, 126), (src_x, src_y), (dest_x, dest_y), 2)
+        pygame.draw.line(screen, Color(0,0,0), (src_x, src_y), (dest_x, dest_y), 2)
 
     # Get pokemons
     pokemon_list = client.get_pokemons()
@@ -130,9 +130,9 @@ while client.is_running() == 'true':
         x = int((float(positions[0]) - minX) * scaleX * 0.9 + 32)
         y = int((float(positions[1]) - minY) * scaleY * 0.9 + 32)
         if(pokemon.type==1):
-            pygame.draw.circle(screen, (138,43,226), [x - 7, y - 7], 20) # Purple if up
+            pygame.draw.circle(screen, (152,245,255), [x - 7, y - 7], 20) # Light blue if up
         else:
-            pygame.draw.circle(screen, (152,245,255), [x - 7, y - 7], 20) # Light blue if down
+            pygame.draw.circle(screen, (255,255,0), [x - 7, y - 7], 20) # Yellow if down
 
     # Get agents
     info = json.loads(client.get_info())
@@ -156,48 +156,37 @@ while client.is_running() == 'true':
             exit(0)
 
     # Timer window
-    pygame.draw.rect(screen, (255,193,193), [20, 10, 90, 65], border_radius=15)
+    pygame.draw.rect(screen, (198,226,255), [20, 5, 75,45], border_radius=15)
     time_text = FONT.render("Time: " + str(int(pygame.time.get_ticks() / 1000)), True, Color(0,0,0))
-    screen.blit(time_text, (30, 30))
+    screen.blit(time_text, (23, 12))
 
     # Stop button
-    button = pygame.Rect(20, 90, 90, 65)
+    button = pygame.Rect(20, 55, 75,45)
     stop_text = FONT.render("Stop", True, Color(0, 0, 0))
     if event.type == pygame.MOUSEBUTTONDOWN:
         mouse_pos = event.pos
         if button.collidepoint(mouse_pos):
             client.stop()
-    pygame.draw.rect(screen, (255, 193, 193), button, border_radius=15)
-    screen.blit(stop_text, (40, 110))
+    pygame.draw.rect(screen, (198,226,255), button, border_radius=15)
+    screen.blit(stop_text, (30, 65))
 
     # Moves counter window
-    pygame.draw.rect(screen, (255,193,193),[20, 170, 90, 65] ,border_radius=15)
+    pygame.draw.rect(screen, (198,226,255),[20, 105, 75,45] ,border_radius=15)
     moves_text = FONT.render("Moves: " + str(moves), True, Color(0,0,0))
-    screen.blit(moves_text, (20,190))
+    screen.blit(moves_text, (20, 110))
 
     # Update screen changes
     display.update()
     clock.tick(60)
 
     # Allocates a pokemon for each agent
-    # if not flag:
     pokemons_copy = pokemons.copy()
     for a, agent in agents.items():
         if agent.get_dest() == -1:
             pokemon, next_node = graph.choosePokForAgent(agent, pokemons_copy)
-            client.choose_next_edge(
-                '{"agent_id":' + str(agent.get_id()) + ', "next_node_id":' + str(next_node) + '}')
+            client.choose_next_edge('{"agent_id":' + str(agent.get_id()) + ', "next_node_id":' + str(next_node) + '}')
             ttl = client.time_to_end()
             print(ttl, client.get_info())
-
-    # if flag:
-    #     i = 0
-    #     for a, agent in agents.items():
-    #         print(pokemons.get(i).src)
-    #         client.choose_next_edge('{"agent_id":' + str(agent.get_id()) + ', "next_node_id":' + str(pokemons.get(i).src) + '}')
-    #         ttl = client.time_to_end()
-    #         i=i+1
-    #     flag = False
 
     move = False
     for a, agent in agents.items():

@@ -164,7 +164,9 @@ class GraphAlgo():
         index=None
         next_node=None
         for p, pokemon in pokemons.items():
-            dist, next_node_temp = self.shortest_path(agent.get_src(), pokemon.get_dest())
+            if agent.src == pokemon.src:
+                return pokemon, pokemon.get_dest()
+            dist, next_node_temp = self.shortest_path(agent.get_src(), pokemon.get_src())
             if dist < minDist:
                 minDist = dist
                 pokemonMin = pokemon
